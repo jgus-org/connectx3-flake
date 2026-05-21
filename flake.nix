@@ -27,20 +27,4 @@
           '';
         };
       });
-
-  # Flash:
-  # wget https://www.mellanox.com/downloads/firmware/fw-ConnectX3-rel-2_42_5000-MCX354A-FCB_A2-A5-FlexBoot-3.4.752.bin.zip
-  # sudo mstflint -d 83:00.0 -i fw-ConnectX3-rel-2_42_5000-MCX354A-FCB_A2-A5-FlexBoot-3.4.752.bin burn
-
-  # Info:
-  # sudo mstflint -d 83:00.0 query full
-
-  # Set Ethernet mode:
-  # sudo mstconfig -d 83:00.0 set LINK_TYPE_P1=2 LINK_TYPE_P2=2
-
-  # Check if UEFI options appeared
-  # sudo mstconfig -d 83:00.0 query | grep UEFI
-
-  # If UEFI_HII_EN or similar appears, set it to true
-  # sudo mstconfig -d 83:00.0 set UEFI_HII_EN=1
 }
