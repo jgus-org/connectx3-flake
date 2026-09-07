@@ -10,7 +10,7 @@ supported the CX3 — and provides `mstconfig`, `mstflint`, and `pciutils`.
 Run the shell directly from GitHub (requires Nix with flakes enabled):
 
 ```sh
-nix develop github:jgus/connectx3-flake
+nix develop github:jgus-org/connectx3-flake
 ```
 
 ## Common commands
