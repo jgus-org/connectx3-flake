@@ -3,8 +3,6 @@
 
   inputs = {
     flake-lib.url = "github:jgus-org/flake-lib/v1";
-    # Tree tooling (the formatter, and flake-lib's host lists) tracks the fleet's current nixpkgs.
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     # The shell's payload stays on a 23.05 release, last where mstflint still supported the CX3.
     nixpkgs-legacy.url = "github:NixOS/nixpkgs/nixos-23.05";
   };
@@ -13,13 +11,11 @@
     {
       self,
       flake-lib,
-      nixpkgs,
       nixpkgs-legacy,
     }:
     flake-lib.lib.eachDefaultLinuxSystem (
       system:
       let
-        pkgs = import nixpkgs { inherit system; };
         pkgs-legacy = import nixpkgs-legacy { inherit system; };
 
         orgFormatting = flake-lib.lib.mkFormatting {
