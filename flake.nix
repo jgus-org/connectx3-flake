@@ -2,30 +2,19 @@
   description = "A devShell for managing legacy Mellanox ConnectX-3 hardware";
 
   inputs = {
+    flake-lib.url = "github:jgus-org/flake-lib/v1";
     # Tree tooling (the formatter, and flake-lib's host lists) tracks the fleet's current nixpkgs.
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-
     # The shell's payload stays on a 23.05 release, last where mstflint still supported the CX3.
     nixpkgs-legacy.url = "github:NixOS/nixpkgs/nixos-23.05";
-
-    flake-lib = {
-      url = "github:jgus-org/flake-lib/v1";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
     {
       self,
+      flake-lib,
       nixpkgs,
       nixpkgs-legacy,
-      flake-lib,
-      treefmt-nix,
     }:
     flake-lib.lib.eachDefaultLinuxSystem (
       system:
@@ -33,12 +22,12 @@
         pkgs = import nixpkgs { inherit system; };
         pkgs-legacy = import nixpkgs-legacy { inherit system; };
 
-        treefmtEval = treefmt-nix.lib.evalModule pkgs {
-          projectRootFile = "flake.nix";
-          programs.nixfmt.enable = true;
+        orgFormatting = flake-lib.lib.mkFormatting {
+          inherit self system;
         };
       in
       {
+        checks.formatting = orgFormatting.check;
         devShells.default = pkgs-legacy.mkShellNoCC {
           buildInputs = [
             pkgs-legacy.mstflint
@@ -52,9 +41,7 @@
             echo "Tip: Use 'sudo mstconfig -d <PCI_ADDR> query' to start."
           '';
         };
-
-        formatter = treefmtEval.config.build.wrapper;
-        checks.formatting = treefmtEval.config.build.check self;
+        formatter = orgFormatting.formatter;
       }
     );
 }
