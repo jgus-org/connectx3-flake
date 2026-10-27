@@ -67,3 +67,5 @@ sudo mstconfig -d 83:00.0 set UEFI_HII_EN=1
 ```
 
 Both `set` commands write the card's non-volatile configuration, so query again after each one to confirm the write took.
+
+See [LICENSE.md](LICENSE.md) for licensing and copyright.
